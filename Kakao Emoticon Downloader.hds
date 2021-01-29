@@ -1,0 +1,37 @@
+#coding: utf8
+#title: kakaoemoticon shop
+#comment: https://e.kakao.com/
+#author: Rojiku
+
+from utils import Downloader
+import json
+from urllib.parse import urlparse
+
+
+class Image(object):
+    def __init__(self, url, filename) -> None:
+        self.url = url
+        self.filename = filename
+
+@Downloader.register
+class Downloader_KakaoEmoticon(Downloader):
+    type = 'Kakao Emoticon Shop'
+    URLS = ['e.kakao.com']
+
+    def read(self):
+        url = "https://e.kakao.com/api/v1/items" + urlparse(self.url).path
+        data = json.loads(downloader.read_html(url))["result"]
+
+        self.title = data["title"]
+        imgs = get_imgs(data["thumbnailUrls"])
+        for i in range(len(imgs)):
+            self.urls.append(imgs[i].url)
+            self.filenames[imgs[i].url] = imgs[i].filename
+        self.setIcon(self.urls[0])
+
+def get_imgs(urls):
+    imgs = []
+    for index in range(len(urls)):
+        img = Image(urls[index], str(index+1)+".png")
+        imgs.append(img)
+    return imgs
