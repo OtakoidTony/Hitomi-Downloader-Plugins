@@ -24,9 +24,9 @@ class Downloader_KakaoEmoticon(Downloader):
 
         self.title = data["title"]
         imgs = get_imgs(data["thumbnailUrls"])
-        for i in range(len(imgs)):
-            self.urls.append(imgs[i].url)
-            self.filenames[imgs[i].url] = imgs[i].filename
+        for img in imgs:
+            self.urls.append(img.url)
+            self.filenames[img.url] = img.filename
         self.setIcon(self.urls[0])
 
 def get_imgs(urls):
